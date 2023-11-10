@@ -37,14 +37,26 @@ public class BookListServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String searchText = req.getParameter("search");
+
+        if (searchText != null){
+            IWebExchange webExchange = JakartaServletWebApplication.buildApplication(req.getServletContext())
+                    .buildExchange(req,resp);
+            WebContext context = new WebContext(webExchange);
+            context.setVariable("books", bookService.findBySearch(searchText));
+            springTemplateEngine.process("listBooks.html", context, resp.getWriter());
+        }
+
         String isbn = req.getParameter("selectedBook");
         Book book = bookService.findBookByIsbn(isbn);
+        req.getSession().setAttribute("bookSelect", book);
+        resp.sendRedirect("/author");
 
 //        Long authorId = (Long) req.getSession().getAttribute("selectedAuthor");
 //
 //        bookService.addAuthorToBook(authorId, isbn);
 
-        req.getSession().setAttribute("bookSelect", book);
-        resp.sendRedirect("/author");
+
     }
 }

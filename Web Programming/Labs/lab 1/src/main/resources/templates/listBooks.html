@@ -15,6 +15,13 @@
     <h1>Welcome to My Book Store</h1>
 </header>
 <main>
+    <div>
+        <form th:method="POST" th:action="@{/listBooks}">
+            <label for="search"></label>
+            <input type="text" name="search" id="search">
+            <input type="submit" value="Search">
+        </form>
+    </div>
     <h2>Choose book:</h2>
 <!--    &lt;!&ndash; Display radio buttons for each book,-->
 <!--            the value should be the isbn-->
