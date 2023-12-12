@@ -1,0 +1,27 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<header>
+    <h1 th:text="${session.bookSelect.getTitle()}"></h1>
+</header>
+<!--<section>-->
+<!--    <h2>Genre</h2>-->
+<!--    <h2>Year</h2>-->
+<!--    <h2>Authors:</h2>-->
+<!--    <ul>-->
+<!--        <li>Петар Петров</li>-->
+<!--        <li>Јован Јованов</li>-->
+<!--    </ul>-->
+<!--</section>-->
+<section>
+    <h2 th:text="${session.bookSelect.getGenre()}"></h2>
+    <h2 th:text="${session.bookSelect.getYear()}"></h2>
+    <h2>Authors:</h2>
+    <ul>
+        <li th:each="author : ${session.bookSelect.getAuthors()}">
+            <th:block th:text="${author.getName()} + ' ' + ${author.getSurName()}"></th:block>
+        </li>
+    </ul>
+</section>
+</body>
+<html>

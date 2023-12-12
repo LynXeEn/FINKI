@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <div>
+        <div>
+            <form th:action="@{/books/add}" th:method="POST">
+                <div>
+                    <label for="isbn">ISBN</label>
+                    <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN" th:value="(${book != null} ? ${book.getIsbn()} : '')">
+                </div>
+
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter Title" th:value="(${book != null} ? ${book.getTitle()} : '')">
+                </div>
+
+                <div>
+                    <label for="genre">Genre</label>
+                    <input type="text" id="genre" name="genre" placeholder="Enter Genre" th:value="(${book != null} ? ${book.getGenre()} : '')">
+                </div>
+
+                <div>
+                    <label for="year">Year</label>
+                    <input type="text" id="year" name="year" placeholder="Enter Year" th:value="(${book != null} ? ${book.getYear()} : '')">
+                </div>
+
+                <div>
+                    <label for="bookStore">Bookstores</label>
+                    <select name="bookStore" id="bookStore">
+                        <option th:if="${book != null}"
+                                th:selected="${book.getBookStore() != null && book.getBookStore().getId() == bookStore.getId()}"
+                                th:each="bookStore : ${bookStores}"
+                                th:text="${bookStore.getName()}"
+                                th:value="${bookStore.getId()}">
+
+                        </option>
+                        <option th:if="${book == null}"
+                                th:each="bookStore : ${bookStores}"
+                                th:text="${bookStore.getName()}"
+                                th:value="${bookStore.getId()}">
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit">Submit</button>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
