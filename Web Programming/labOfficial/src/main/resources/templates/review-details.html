@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 style="margin-left: 300px" th:text="'All reviews for the book: ' + ${book.getTitle()}"></h1>
+
+<div style="margin-left: 200px">
+    <div>
+        <h3>Search</h3>
+        <form th:action="@{/review/search}" th:method="GET">
+            <label for="from">Select start date</label>
+            <input type="datetime-local" id="from" name="from">
+            <br>
+            <label for="to">Select end date</label>
+            <input type="datetime-local" id="to" name="to">
+            <br>
+            <input type="submit" value="Search">
+            <input type="hidden" th:value="${book.getId()}" th:name="bookId">
+            <hr>
+        </form>
+    </div>
+
+    <div>
+        <div th:each="review : ${reviews}" style="margin-bottom: 20px">
+            <h3 th:text="'Score: ' + ${review.getScore()}"></h3>
+
+            <h3 th:text="'Description: ' + ${review.getDescription()}"></h3>
+
+            <h3 th:text="'Date and time: ' + ${review.getTimestamp().toString()}"></h3>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2>Searched reviews:</h2>
+    <div th:if="${search}">
+        <div th:each="review : ${searchReviews}" style="margin-bottom: 20px">
+            <h3 th:text="'Score: ' + ${review.getScore()}"></h3>
+
+            <h3 th:text="'Description: ' + ${review.getDescription()}"></h3>
+
+            <h3 th:text="'Date and time: ' + ${review.getTimestamp().toString()}"></h3>
+            <hr>
+        </div>
+    </div>
+</div>
+</body>
+</html>

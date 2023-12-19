@@ -5,11 +5,10 @@ import jakarta.servlet.http.HttpSession;
 import mk.ukim.finki.wp.labofficial.model.Book;
 import mk.ukim.finki.wp.labofficial.service.BookService;
 import mk.ukim.finki.wp.labofficial.service.BookStoreService;
+import mk.ukim.finki.wp.labofficial.service.ReviewService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -17,10 +16,12 @@ public class BookController {
 
     private final BookService bookService;
     private final BookStoreService bookStoreService;
+    private final ReviewService reviewService;
 
-    public BookController(BookService bookService, BookStoreService bookStoreService) {
+    public BookController(BookService bookService, BookStoreService bookStoreService, ReviewService reviewService) {
         this.bookService = bookService;
         this.bookStoreService = bookStoreService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping
@@ -84,5 +85,12 @@ public class BookController {
         return "redirect:/books";
     }
 
+    @GetMapping("/getReviews")
+    public String getAllReviews(Model model){
+        model.addAttribute("reviews", reviewService.findAllReviews());
+        model.addAttribute("bestBook", reviewService.findBookWithTheBestAverageScore().keySet().stream().findFirst().get());
+        model.addAttribute("averageScore", reviewService.findBookWithTheBestAverageScore().values().stream().findFirst().get());
+        return "all-reviews";
+    }
 
 }

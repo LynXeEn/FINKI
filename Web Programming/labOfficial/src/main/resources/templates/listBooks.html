@@ -42,6 +42,20 @@
                     <i>Edit</i>
                 </button>
             </a>
+
+            <a th:href="@{'/review/add-review/' + ${book.getId()}}">
+                <button type="button">
+                    <i style="color: red">Add Review</i>
+                </button>
+            </a>
+
+            <a th:href="@{'/review/getReviewPage/' + ${book.getId()}}">
+                <button type="button">
+                    <i>All Reviews</i>
+                </button>
+            </a>
+
+
         </div>
         <input type="submit" value="Submit">
 
@@ -52,6 +66,14 @@
     <button class="btn">
         <a href="/books/add-form">Add new book</a>
     </button>
+
+    <div>
+        <a href="/books/getReviews">
+            <button><i>
+                Get All Reviews
+            </i></button>
+        </a>
+    </div>
 
 </main>
 </body>

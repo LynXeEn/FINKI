@@ -1,11 +1,14 @@
 package mk.ukim.finki.wp.labofficial.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.ukim.finki.wp.labofficial.model.Author;
 import mk.ukim.finki.wp.labofficial.model.Book;
 import mk.ukim.finki.wp.labofficial.model.BookStore;
-import mk.ukim.finki.wp.labofficial.repository.InMemoryAuthorRepository;
-import mk.ukim.finki.wp.labofficial.repository.InMemoryBookRepository;
-import mk.ukim.finki.wp.labofficial.repository.InMemoryBookStoreRepository;
+import mk.ukim.finki.wp.labofficial.model.exceptions.AuthorNotFoundException;
+import mk.ukim.finki.wp.labofficial.model.exceptions.BookNotFoundException;
+import mk.ukim.finki.wp.labofficial.repository.jpa.AuthorRepository;
+import mk.ukim.finki.wp.labofficial.repository.jpa.BookRepository;
+import mk.ukim.finki.wp.labofficial.repository.jpa.BookStoreRepository;
 import mk.ukim.finki.wp.labofficial.service.BookService;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +18,16 @@ import java.util.Optional;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final InMemoryBookRepository bookRepository;
-    private final InMemoryAuthorRepository authorRepository;
-    private final InMemoryBookStoreRepository bookStoreRepository;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final BookStoreRepository bookStoreRepository;
 
-    public BookServiceImpl(InMemoryBookRepository bookRepository, InMemoryAuthorRepository authorRepository, InMemoryBookStoreRepository bookStoreRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, BookStoreRepository bookStoreRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.bookStoreRepository = bookStoreRepository;
     }
+
 
     @Override
     public List<Book> listBooks() {
@@ -31,13 +35,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Author addAuthorToBook(Long authorId, String isbn) {
-        Author author = authorRepository.findById(authorId).get();
-        Book book = bookRepository.findByIsbn(isbn).get();
+    public Author addAuthorToBook(Long authorId, Long bookId) {
+        Author author = authorRepository.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId));
+        Book book = bookRepository.findBookById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
 
-        book.getAuthors().removeIf(author1 -> author1.getId() == authorId);
-
-        bookRepository.addAuthorToBook(author, book);
+        bookRepository.addAuthorToBook(book, author);
 
         return author;
     }
@@ -49,7 +51,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> searchBook(String text) {
-        return bookRepository.searchBook(text);
+        return bookRepository.searchBooksByTitleLikeIgnoreCase(text);
     }
 
     @Override
@@ -63,8 +65,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book saveOrUpdate(String isbn, String title, String genre, int year, Long bookstoreId) {
         BookStore bookStore = bookStoreRepository.findById(bookstoreId).orElseThrow();
-        return bookRepository.saveOrUpdate(isbn, title, genre, year, bookStore);
+        bookRepository.deleteByIsbn(isbn);
+        return bookRepository.save(new Book(isbn, title, genre, year, bookStore));
     }
 }

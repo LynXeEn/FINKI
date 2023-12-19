@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.labofficial.repository;
+package mk.ukim.finki.wp.labofficial.repository.impl;
 
 import mk.ukim.finki.wp.labofficial.bootstrap.DataHolder;
 import mk.ukim.finki.wp.labofficial.model.BookStore;

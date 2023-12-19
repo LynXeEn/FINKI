@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface BookService {
     List<Book> listBooks();
-    Author addAuthorToBook (Long authorId, String isbn);
+    Author addAuthorToBook (Long authorId, Long bookId);
     Optional<Book> findBookByIsbn(String isbn);
     List<Book> searchBook(String text);
     void deleteById(Long id);

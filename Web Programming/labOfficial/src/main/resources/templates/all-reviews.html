@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1 style="font-style: italic; font-weight: bold; margin-left: 500px; margin-bottom: 100px">All reviews for all books</h1>
+
+<div>
+    <h2 th:text="'Book with the best average score is: ' + ${bestBook.getTitle()} + ' with score: ' + ${averageScore}"></h2>
+</div>
+
+<div>
+    <div th:each="review : ${reviews}" style="margin-bottom: 20px">
+        <h2><strong th:text="'Book title: ' + ${review.getBook().getTitle()}"></strong> </h2>
+        <h3 th:text="'Score: ' + ${review.getScore()}"></h3>
+        <h3 th:text="'Description: ' + ${review.getDescription()}"></h3>
+        <h3 th:text="'Date and time: ' + ${review.getTimestamp().toString()}"></h3>
+        <hr>
+    </div>
+</div>
+
+</body>
+</html>

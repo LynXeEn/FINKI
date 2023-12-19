@@ -30,7 +30,7 @@ public class AuthorController {
     @PostMapping
     public String selectAuthor(HttpSession session, @RequestParam("selectedAuthor") long id){
         Book book = (Book) session.getAttribute("bookSelect");
-        bookService.addAuthorToBook(id, book.getIsbn());
+        bookService.addAuthorToBook(id, book.getId());
         session.setAttribute("authorSelect", authorService.findById(id).get());
 
         return "redirect:/bookDetails";

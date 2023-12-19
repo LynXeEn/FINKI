@@ -1,7 +1,8 @@
 package mk.ukim.finki.wp.labofficial.service.impl;
 
 import mk.ukim.finki.wp.labofficial.model.BookStore;
-import mk.ukim.finki.wp.labofficial.repository.InMemoryBookStoreRepository;
+import mk.ukim.finki.wp.labofficial.repository.impl.InMemoryBookStoreRepository;
+import mk.ukim.finki.wp.labofficial.repository.jpa.BookStoreRepository;
 import mk.ukim.finki.wp.labofficial.service.BookStoreService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Service
 public class BookStoreServiceImpl implements BookStoreService {
 
-    private final InMemoryBookStoreRepository bookStoreRepository;
+    private final BookStoreRepository bookStoreRepository;
 
-    public BookStoreServiceImpl(InMemoryBookStoreRepository bookStoreRepository) {
+    public BookStoreServiceImpl(BookStoreRepository bookStoreRepository) {
         this.bookStoreRepository = bookStoreRepository;
     }
 
